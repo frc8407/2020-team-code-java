@@ -6,6 +6,7 @@ import java.util.Map;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import frc.robot.RobotConfig.IntakeConfig;
 import frc.robot.components.DriverJoystick.TriState;
 import frc.robot.logging.LoggableRobotComponent;
 
@@ -14,10 +15,14 @@ public class Intake extends LoggableRobotComponent {
   private VictorSPX innerIntake;
   private VictorSPX indexer;
 
-  public Intake(int outerIntakeID, int innerIntakeID, int indexerID) {
-    outerIntake = new VictorSPX(outerIntakeID);
-    innerIntake = new VictorSPX(innerIntakeID);
-    indexer = new VictorSPX(indexerID);
+  IntakeConfig config;
+
+  public Intake(IntakeConfig config) {
+    this.config = config;
+
+    outerIntake = new VictorSPX(config.outerIntakeControllerID);
+    innerIntake = new VictorSPX(config.innerIntakeControllerID);
+    indexer = new VictorSPX(config.indexerControllerID);
   }
 
   private void driveOuterIntake(double power) {

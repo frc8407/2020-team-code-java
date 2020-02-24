@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.Vector2d;
+import frc.robot.RobotConfig.DrivetrainConfig;
 import frc.robot.logging.LoggableRobotComponent;
 
 public class DrivetrainX extends LoggableRobotComponent {
@@ -17,14 +18,17 @@ public class DrivetrainX extends LoggableRobotComponent {
   CANSparkMax controllerLeft;
   CANSparkMax controllerRight;
 
-  public DrivetrainX(int frontLeftID, int frontRightID, int backLeftID, int backRightID, int leftID, int rightID) {
-    controllerFrontLeft = new CANSparkMax(frontLeftID, MotorType.kBrushless);
-    controllerFrontRight = new CANSparkMax(frontRightID, MotorType.kBrushless);
-    controllerBackLeft = new CANSparkMax(backLeftID, MotorType.kBrushless);
-    controllerBackRight = new CANSparkMax(backRightID, MotorType.kBrushless);
+  DrivetrainConfig config;
+
+  public DrivetrainX(DrivetrainConfig config) {
+    this.config = config;
+    controllerFrontLeft = new CANSparkMax(config.frontLeftControllerID, MotorType.kBrushless);
+    controllerFrontRight = new CANSparkMax(config.frontRightControllerID, MotorType.kBrushless);
+    controllerBackLeft = new CANSparkMax(config.backLeftControllerID, MotorType.kBrushless);
+    controllerBackRight = new CANSparkMax(config.backRightControllerID, MotorType.kBrushless);
     
-    controllerLeft = new CANSparkMax(leftID, MotorType.kBrushless);
-    controllerRight = new CANSparkMax(rightID, MotorType.kBrushless);
+    controllerLeft = new CANSparkMax(config.leftControllerID, MotorType.kBrushless);
+    controllerRight = new CANSparkMax(config.rightControllerID, MotorType.kBrushless);
   }
 
   private double deadband(double v) {

@@ -28,8 +28,9 @@ public class Robot extends TimedRobot {
 
   private final DriverJoystick joystickMain = new DriverJoystick(0, DriverJoystick.defaultLogitechConfig);
   
-  private final DrivetrainX drivetrain = new DrivetrainX(6, 2, 3, 4, 5, 1);
-  private final Intake intake = new Intake(10, 11, 12);
+  private final RobotConfig config = new RobotConfig();
+  private final DrivetrainX drivetrain = new DrivetrainX(config.drivetrainConfig);
+  private final Intake intake = new Intake(config.intakeConfig);
   private final RobotGyro gyro = new RobotGyro();
   // private final Hang hang = new Hang(7, 8, 9);
 

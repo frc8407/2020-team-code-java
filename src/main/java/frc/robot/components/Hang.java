@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import frc.robot.RobotConfig.HangConfig;
 import frc.robot.logging.LoggableRobotComponent;
 
 public class Hang extends LoggableRobotComponent {
@@ -17,10 +18,14 @@ public class Hang extends LoggableRobotComponent {
   private CANSparkMax hangDown2;
   private VictorSPX hangUp;
 
-  public Hang(int hangDownID1, int hangDownID2, int hangUpID) {
-    hangDown1 = new CANSparkMax(hangDownID1, MotorType.kBrushless);
-    hangDown2 = new CANSparkMax(hangDownID2, MotorType.kBrushless);
-    hangUp = new VictorSPX(hangUpID);
+  HangConfig config;
+
+  public Hang(HangConfig config) {
+    this.config = config;
+
+    hangDown1 = new CANSparkMax(config.leftHangDownControllerID, MotorType.kBrushless);
+    hangDown2 = new CANSparkMax(config.rightHangDownControllerID, MotorType.kBrushless);
+    hangUp = new VictorSPX(config.hangUpControllerID);
 
     hangDown2.setInverted(true);
   }
