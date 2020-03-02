@@ -7,14 +7,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.Vector2d;
 import frc.robot.components.DriverJoystick;
-import frc.robot.components.DrivetrainX;
-import frc.robot.components.Hang;
+import frc.robot.components.DrivetrainH;
 import frc.robot.components.Intake;
 import frc.robot.components.RobotGyro;
-import frc.robot.logging.Logger;
+import frc.robot.components.Shooter;
+import frc.robot.logging.LoggerUtil;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,18 +25,18 @@ import frc.robot.logging.Logger;
  * project.
  */
 public class Robot extends TimedRobot {
-  private final Logger logger = new Logger();
-
   private final DriverJoystick joystickMain = new DriverJoystick(0, DriverJoystick.defaultLogitechConfig);
   
   private final RobotConfig config = new RobotConfig();
-  private final DrivetrainX drivetrain = new DrivetrainX(config.drivetrainConfig);
+  private final DrivetrainH drivetrain = new DrivetrainH(config.drivetrainConfig);
   private final Intake intake = new Intake(config.intakeConfig);
+  private final Shooter shooter = new Shooter(config.shooterConfig);
   private final RobotGyro gyro = new RobotGyro();
   // private final Hang hang = new Hang(7, 8, 9);
 
   @Override
   public void robotInit() {
+    LoggerUtil.init();
   }
 
   @Override
@@ -53,23 +54,28 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    // Vector2d leftStick = joystickMain.getLeftStick();
-    // Vector2d rightStick = joystickMain.getRightStick();
-    // double yaw = gyro.getYaw();
+    Vector2d leftStick = joystickMain.getLeftStick();
+    Vector2d rightStick = joystickMain.getRightStick();
+    double yaw = gyro.getYaw();
 
-    // drivetrain.drive(leftStick, rightStick, yaw);
-    intake.drive(joystickMain.getLeftTriState(), joystickMain.getRightTriState(), joystickMain.getYATriState());
+    drivetrain.drive(leftStick, rightStick, yaw);
+    intake.drive(joystickMain.getLeftTriState(), joystickMain.getRightTriState());
+    shooter.drive(joystickMain.getYATriState());
   }
 
   @Override
   public void testPeriodic() {
   }
-  
-  public void log() {
-    logger.put(drivetrain);
-    logger.put(joystickMain);
-    logger.put(gyro);
 
-    logger.send();
+  public void logBatteryVoltage() {
+    LoggerUtil.getEntry("battery.voltage").forceSetDouble(RobotController.getBatteryVoltage());
+  }
+
+  public void log() {
+    logBatteryVoltage();
+    drivetrain.log();
+    intake.log();
+    shooter.log();
+    gyro.log();
   }
 }

@@ -1,8 +1,5 @@
 package frc.robot.components;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
@@ -58,14 +55,7 @@ public class Hang extends LoggableRobotComponent {
   }
 
   @Override
-  public String getComponentName() {
-    return "Hang";
-  }
-
-  @Override
-  public Map<String, Double> getLogs() {
-    Map<String, Double> info = new HashMap<>();
-
-    return info;
+  public void log() {
+    
   }
 }

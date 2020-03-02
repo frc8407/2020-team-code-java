@@ -1,8 +1,5 @@
 package frc.robot.components;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.Vector2d;
 import frc.robot.logging.LoggableRobotComponent;
@@ -119,21 +116,8 @@ public class DriverJoystick extends LoggableRobotComponent {
   }
 
   @Override
-  public String getComponentName() {
-    return "Joystick";
-  }
-
-  @Override
-  public Map<String, Double> getLogs() {
-    Map<String, Double> info = new HashMap<>();
-
-    info.put("id", (double) joystickID);
-    info.put("leftStick.x", getLeftStick().x);
-    info.put("leftStick.y", getLeftStick().y);
-    info.put("rightStick.x", getRightStick().x);
-    info.put("rightStick.y", getRightStick().y);
-
-    return info;
+  public void log() {
+    
   }
 
   public enum TriState {
@@ -148,12 +132,14 @@ public class DriverJoystick extends LoggableRobotComponent {
     public static TriState fromTwoBooleanValues(boolean b1, boolean b2) {
       if (b1 && b2)
         return TriState.STOP;
-      else if (b1)
+
+      if (b1)
         return TriState.FORWARD;
-      else if (b2)
+        
+      if (b2)
         return TriState.REVERSE;
-      else
-        return TriState.STOP;
+
+      return TriState.STOP;
     }
   }
 }
