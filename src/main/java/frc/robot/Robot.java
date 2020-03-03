@@ -26,7 +26,7 @@ import frc.robot.logging.LoggerUtil;
  */
 public class Robot extends TimedRobot {
   private final DriverJoystick joystickMain = new DriverJoystick(0, DriverJoystick.defaultLogitechConfig);
-  
+
   private final RobotConfig config = new RobotConfig();
   private final DrivetrainH drivetrain = new DrivetrainH(config.drivetrainConfig);
   private final Intake intake = new Intake(config.intakeConfig);
@@ -59,8 +59,9 @@ public class Robot extends TimedRobot {
     double yaw = gyro.getYaw();
 
     drivetrain.drive(leftStick, rightStick, yaw);
-    intake.drive(joystickMain.getLeftTriState(), joystickMain.getRightTriState());
-    shooter.drive(joystickMain.getYATriState());
+
+    shooter.drive(joystickMain.getRB2Double());
+    intake.drive(joystickMain.getLeftTriState(), joystickMain.getRB1(), shooter.isReadyToShoot());
   }
 
   @Override

@@ -1,6 +1,8 @@
 package frc.robot.components;
 
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.Vector2d;
@@ -16,7 +18,7 @@ public class DrivetrainH extends LoggableRobotComponent {
 
   DrivetrainConfig config;
 
-  private double _multiplier = 0.5;
+  private double _multiplier = 0.75;
 
   public DrivetrainH(DrivetrainConfig config) {
     this.config = config;
@@ -25,8 +27,23 @@ public class DrivetrainH extends LoggableRobotComponent {
     controllerRight1 = new CANSparkMax(config.rightController1ID, MotorType.kBrushless);
     controllerRight2 = new CANSparkMax(config.rightController2ID, MotorType.kBrushless);
   
-    controllerLeft2.setInverted(true);
-    controllerRight2.setInverted(true);
+    controllerLeft2.follow(controllerLeft1, true);
+    controllerRight2.follow(controllerRight1, true);
+
+    controllerLeft1.setIdleMode(IdleMode.kBrake);
+    controllerLeft2.setIdleMode(IdleMode.kBrake);
+    controllerRight1.setIdleMode(IdleMode.kBrake);
+    controllerRight2.setIdleMode(IdleMode.kBrake);
+
+    controllerLeft1.setOpenLoopRampRate(0.15);
+    controllerLeft2.setOpenLoopRampRate(0.15);
+    controllerRight1.setOpenLoopRampRate(0.15);
+    controllerRight2.setOpenLoopRampRate(0.15);
+
+    controllerLeft1.enableVoltageCompensation(12.0);
+    controllerLeft2.enableVoltageCompensation(12.0);
+    controllerRight1.enableVoltageCompensation(12.0);
+    controllerRight2.enableVoltageCompensation(12.0);
   }
 
   private double deadband(double v) {
@@ -39,10 +56,7 @@ public class DrivetrainH extends LoggableRobotComponent {
     double ry = deadband(rightStick.y);
     
     controllerLeft1.set(ly * _multiplier);
-    controllerLeft2.set(ly * _multiplier);
-
     controllerRight1.set(-ry * _multiplier);
-    controllerRight2.set(-ry * _multiplier);
   }
 
   @Override
@@ -52,8 +66,5 @@ public class DrivetrainH extends LoggableRobotComponent {
 
     LoggerUtil.logSparkMax("drivetrain.rightMotor1Frame", controllerRight1);
     LoggerUtil.logSparkMax("drivetrain.rightMotor2Frame", controllerRight2);
-    
-    // LoggerUtil.logSparkMax("drivetrainLeft", controllerLeft);
-    // LoggerUtil.logSparkMax("drivetrainRight", controllerRight);
   }
 }

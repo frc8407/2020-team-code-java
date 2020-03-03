@@ -84,12 +84,20 @@ public class DriverJoystick extends LoggableRobotComponent {
     return joystick.getRawAxis(config.lb2) > 0.05;
   }
 
+  public double getLB2Double() {
+    return joystick.getRawAxis(config.lb2);
+  }
+
   public boolean getRB1() {
     return joystick.getRawButton(config.rb1);
   }
 
   public boolean getRB2() {
     return joystick.getRawAxis(config.rb2) > 0.05;
+  }
+  
+  public double getRB2Double() {
+    return joystick.getRawAxis(config.rb2);
   }
 
   private Vector2d getStick(int axisVertical, int axisHorizontal) {

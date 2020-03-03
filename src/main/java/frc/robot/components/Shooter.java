@@ -1,16 +1,19 @@
 package frc.robot.components;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.RobotConfig.ShooterConfig;
-import frc.robot.components.DriverJoystick.TriState;
 import frc.robot.logging.LoggableRobotComponent;
 import frc.robot.logging.LoggerUtil;
 
 public class Shooter extends LoggableRobotComponent {
   private CANSparkMax leftShooter;
   private CANSparkMax rightShooter;
+
+  private CANEncoder leftEncoder;
+  private CANEncoder rightEncoder;
 
   ShooterConfig config;
 
@@ -22,11 +25,25 @@ public class Shooter extends LoggableRobotComponent {
 
     leftShooter.setInverted(true);
     rightShooter.setInverted(false);
+
+    leftShooter.enableVoltageCompensation(12.0);
+    rightShooter.enableVoltageCompensation(12.0);
+
+    leftEncoder = leftShooter.getEncoder();
+    rightEncoder = rightShooter.getEncoder();
   }
   
-  public void drive(TriState triState) {
-    leftShooter.set(triState.value);
-    rightShooter.set(triState.value);
+  public void drive(double speed) {
+    leftShooter.set(speed);
+    rightShooter.set(speed);
+  }
+
+  public double getVelocity() {
+    return (leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2.0;
+  }
+
+  public boolean isReadyToShoot() {
+    return getVelocity() > 5300.0;
   }
 
   @Override

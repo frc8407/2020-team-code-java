@@ -1,7 +1,5 @@
 package frc.robot.components;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -26,16 +24,16 @@ public class Intake extends LoggableRobotComponent {
   }
 
   private void driveIntake(double power) {
-    intake.set(power * 1.0);
+    intake.set(power * 0.75);
   }
 
-  private void driveIndexer(double power) {
-    indexer.set(power * 0.25);
+  private void driveIndexer(boolean drive) {
+    indexer.set(drive? 0.1 : 0.0);
   }
   
-  public void drive(TriState intakeState, TriState indexerState) {
+  public void drive(TriState intakeState, boolean driveIndexer, boolean isShooterReady) {
     driveIntake(intakeState.value);
-    driveIndexer(indexerState.value);
+    driveIndexer(driveIndexer && isShooterReady);
   }
 
   @Override
