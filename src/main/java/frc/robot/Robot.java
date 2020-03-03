@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
   }
 
   public void logBatteryVoltage() {
-    LoggerUtil.getEntry("battery.voltage").forceSetDouble(RobotController.getBatteryVoltage());
+    LoggerUtil.logNumber("battery.voltage", RobotController.getBatteryVoltage());
   }
 
   public void log() {

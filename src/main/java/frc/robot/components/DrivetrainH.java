@@ -1,6 +1,5 @@
 package frc.robot.components;
 
-import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -11,10 +10,12 @@ import frc.robot.logging.LoggableRobotComponent;
 import frc.robot.logging.LoggerUtil;
 
 public class DrivetrainH extends LoggableRobotComponent {
-  CANSparkMax controllerLeft1;
-  CANSparkMax controllerLeft2;
-  CANSparkMax controllerRight1;
-  CANSparkMax controllerRight2;
+  private CANSparkMax controllerLeft1;
+  private CANSparkMax controllerLeft2;
+  private CANSparkMax controllerRight1;
+  private CANSparkMax controllerRight2;
+
+  public DrivetrainAutonomous autonomous;
 
   DrivetrainConfig config;
 
@@ -27,6 +28,8 @@ public class DrivetrainH extends LoggableRobotComponent {
     controllerRight1 = new CANSparkMax(config.rightController1ID, MotorType.kBrushless);
     controllerRight2 = new CANSparkMax(config.rightController2ID, MotorType.kBrushless);
   
+    controllerRight1.setInverted(true);
+
     controllerLeft2.follow(controllerLeft1, true);
     controllerRight2.follow(controllerRight1, true);
 
@@ -44,6 +47,8 @@ public class DrivetrainH extends LoggableRobotComponent {
     controllerLeft2.enableVoltageCompensation(12.0);
     controllerRight1.enableVoltageCompensation(12.0);
     controllerRight2.enableVoltageCompensation(12.0);
+
+    this.autonomous = new DrivetrainAutonomous(controllerLeft1, controllerLeft2, controllerRight1, controllerRight2);
   }
 
   private double deadband(double v) {
@@ -56,7 +61,7 @@ public class DrivetrainH extends LoggableRobotComponent {
     double ry = deadband(rightStick.y);
     
     controllerLeft1.set(ly * _multiplier);
-    controllerRight1.set(-ry * _multiplier);
+    controllerRight1.set(ry * _multiplier);
   }
 
   @Override
@@ -66,5 +71,7 @@ public class DrivetrainH extends LoggableRobotComponent {
 
     LoggerUtil.logSparkMax("drivetrain.rightMotor1Frame", controllerRight1);
     LoggerUtil.logSparkMax("drivetrain.rightMotor2Frame", controllerRight2);
+    
+    autonomous.log();
   }
 }

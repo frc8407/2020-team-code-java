@@ -24,6 +24,10 @@ public class LoggerUtil {
     table.getEntry(name + ".closedLoopRampRate").forceSetDouble(controller.getClosedLoopRampRate());
     table.getEntry(name + ".isInverted").forceSetBoolean(controller.getInverted());
   }
+
+  public static void logNumber(String name, double value) {
+    table.getEntry(name).forceSetDouble(value);
+  }
   
   public static void logVictorSPX(String name, VictorSPX controller) {
     table.getEntry(name + ".voltage").forceSetDouble(controller.getBusVoltage());

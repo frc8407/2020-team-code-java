@@ -20,8 +20,13 @@ public class RobotGyro extends LoggableRobotComponent {
     return imu.getAngle();
   }
 
+  public double getYawAngularVelocity() {
+    return imu.getRate();
+  }
+
   @Override
   public void log() {
-    LoggerUtil.getEntry("gyro.yaw").forceSetDouble(getYaw());
+    LoggerUtil.logNumber("gyro.yaw", getYaw());
+    LoggerUtil.logNumber("gyro.yawAngularVelocity", getYawAngularVelocity());
   }
 }
