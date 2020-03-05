@@ -24,7 +24,7 @@ public class Intake extends LoggableRobotComponent {
   }
 
   private void driveIntake(double power) {
-    intake.set(power * 0.75);
+    intake.set(power * 0.3);
   }
 
   private void driveIndexer(boolean drive) {

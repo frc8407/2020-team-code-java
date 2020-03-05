@@ -20,9 +20,9 @@ public class RobotConfig {
   }
 
   public class HangConfig {
-    public final int leftHangDownControllerID = 14;
-    public final int rightHangDownControllerID = 15;
-    public final int hangUpControllerID = 13;
+    public final int leftHangDownControllerID = 9;
+    public final int rightHangDownControllerID = 10;
+    public final int hangUpControllerID = 11;
   }
 
   public final DrivetrainConfig drivetrainConfig = new DrivetrainConfig();
