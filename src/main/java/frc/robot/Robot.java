@@ -76,7 +76,7 @@ public class Robot extends TimedRobot {
     else if(vel < 0 && vel < -0.1) vel = -0.1;
 
 
-    drivetrain.drive(new Vector2d(0, vel), new Vector2d(0, -vel), 0.0);
+    drivetrain.drive(vel, -vel);
   }
 
   @Override
@@ -86,20 +86,13 @@ public class Robot extends TimedRobot {
     double yaw = gyro.getYaw();
 
     if (joystickMain.getRB2()) {
-      aimLimelight();
+      //aimLimelight();
     } else {
-      drivetrain.drive(leftStick, rightStick, yaw);
+      drivetrain.drive(leftStick.y, rightStick.y);
     }
 
-    if(joystickMain.getY()) {
-      hang.driveDown(1);
-    }
-    else if(joystickMain.getA()) {
-      hang.driveDown(-1);
-    }
-    else {
-      hang.driveDown(0);
-    }
+    hang.driveDown(joystickMain.getYATriState());
+    
     shooter.drive(joystickMain.getRB2Double());
     intake.drive(joystickMain.getLeftTriState(), joystickMain.getRB1(), shooter.isReadyToShoot());
   }

@@ -6,7 +6,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.RobotConfig.HangConfig;
+import frc.robot.components.DriverJoystick.TriState;
 import frc.robot.logging.LoggableRobotComponent;
+import frc.robot.logging.LoggerUtil;
 
 public class Hang extends LoggableRobotComponent {
   private VictorSPX hangDown1;
@@ -22,38 +24,22 @@ public class Hang extends LoggableRobotComponent {
     hangDown2 = new VictorSPX(config.rightHangDownControllerID);
     hangUp = new VictorSPX(config.hangUpControllerID);
 
+    hangDown1.follow(hangDown2);
+
     hangDown2.setInverted(true);
   }
 
-  public void driveUp(int direction) {
-    if(direction == 1) {
-      hangUp.set(ControlMode.PercentOutput, -0.75);
-    }
-    else if(direction == -1) {
-      hangUp.set(ControlMode.PercentOutput, 0.75);
-    }
-    else {
-      hangUp.set(ControlMode.PercentOutput, 0.0);
-    }
+  public void driveUp(TriState state) {
+    hangUp.set(ControlMode.PercentOutput, state.value);
   }
 
-  public void driveDown(int direction) {
-    if(direction == 1) {
-      hangDown1.set(ControlMode.PercentOutput, 0.25);
-      hangDown2.set(ControlMode.PercentOutput, -0.25);
-    }
-    else if(direction == -1) {
-      hangDown1.set(ControlMode.PercentOutput, -1.0);
-      hangDown2.set(ControlMode.PercentOutput, 1.0);
-    }
-    else {
-      hangDown1.set(ControlMode.PercentOutput, 0.0);
-      hangDown2.set(ControlMode.PercentOutput, 0.0);
-    }
+  public void driveDown(TriState state) {
+    hangDown1.set(ControlMode.PercentOutput, state.value);
   }
 
   @Override
   public void log() {
-    
+    LoggerUtil.logVictorSPX("hang.down1", hangDown1);
+    LoggerUtil.logVictorSPX("hang.down2", hangDown2);
   }
 }

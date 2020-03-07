@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.drive.Vector2d;
 import frc.robot.RobotConfig.DrivetrainConfig;
 import frc.robot.logging.LoggableRobotComponent;
 import frc.robot.logging.LoggerUtil;
+import frc.robot.math.MathUtils;
 
 public class DrivetrainH extends LoggableRobotComponent {
   private CANSparkMax controllerLeft1;
@@ -19,7 +20,8 @@ public class DrivetrainH extends LoggableRobotComponent {
 
   DrivetrainConfig config;
 
-  private double _multiplier = 0.75;
+  private double _multiplier = 0.5;
+  private double _turnMultiplier = 0.25; 
 
   public DrivetrainH(DrivetrainConfig config) {
     this.config = config;
@@ -56,12 +58,17 @@ public class DrivetrainH extends LoggableRobotComponent {
     return v;
   }
 
-  public void drive(Vector2d leftStick, Vector2d rightStick, double yaw) {
-    double ly = deadband(leftStick.y);
-    double ry = deadband(rightStick.y);
+  public void drive(double leftY, double rightY) {
+    double ly = deadband(leftY);
+    double ry = deadband(rightY);
+
+    double _mult = _multiplier;
+    if(ly * ry < 0) {
+      _mult = _turnMultiplier;
+    }
     
-    controllerLeft1.set(ly * _multiplier);
-    controllerRight1.set(ry * _multiplier);
+    controllerLeft1.set(ly * _mult);
+    controllerRight1.set(ry * _mult);
   }
 
   @Override
