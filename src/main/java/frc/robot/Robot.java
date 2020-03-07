@@ -7,9 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.Vector2d;
@@ -17,6 +14,7 @@ import frc.robot.components.DriverJoystick;
 import frc.robot.components.DrivetrainH;
 import frc.robot.components.Hang;
 import frc.robot.components.Intake;
+import frc.robot.components.LimelightAimController;
 import frc.robot.components.RobotGyro;
 import frc.robot.components.Shooter;
 import frc.robot.logging.LoggerUtil;
@@ -33,6 +31,7 @@ public class Robot extends TimedRobot {
 
   private final RobotConfig config = new RobotConfig();
   private final DrivetrainH drivetrain = new DrivetrainH(config.drivetrainConfig);
+  private final LimelightAimController limelightAimController = new LimelightAimController(drivetrain);
   private final Intake intake = new Intake(config.intakeConfig);
   private final Shooter shooter = new Shooter(config.shooterConfig);
   private final RobotGyro gyro = new RobotGyro();
@@ -56,37 +55,14 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
   }
 
-  NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-  NetworkTableEntry tx = limelightTable.getEntry("tx");
-  NetworkTableEntry ty = limelightTable.getEntry("ty");
-  NetworkTableEntry ta = limelightTable.getEntry("ta");
-
-  int sign(double a) {
-    if(a > 0) return 1;
-    else return -1;
-  }
-  void aimLimelight() {
-    double x = tx.getDouble(0.0);
-    double area = ta.getDouble(0.0);
-
-    double vel = x * 0.0105;
-    vel += sign(vel) * 0.025;
-
-    if(vel > 0 && vel > 0.1) vel = 0.1;
-    else if(vel < 0 && vel < -0.1) vel = -0.1;
-
-
-    drivetrain.drive(vel, -vel);
-  }
-
   @Override
   public void teleopPeriodic() {
     Vector2d leftStick = joystickMain.getLeftStick();
     Vector2d rightStick = joystickMain.getRightStick();
-    double yaw = gyro.getYaw();
+    // double yaw = gyro.getYaw();
 
     if (joystickMain.getRB2()) {
-      //aimLimelight();
+      limelightAimController.driveTurn();
     } else {
       drivetrain.drive(leftStick.y, rightStick.y);
     }
@@ -111,5 +87,7 @@ public class Robot extends TimedRobot {
     intake.log();
     shooter.log();
     gyro.log();
+
+    limelightAimController.tryUpdate();
   }
 }

@@ -4,11 +4,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.drive.Vector2d;
 import frc.robot.RobotConfig.DrivetrainConfig;
 import frc.robot.logging.LoggableRobotComponent;
 import frc.robot.logging.LoggerUtil;
-import frc.robot.math.MathUtils;
 
 public class DrivetrainH extends LoggableRobotComponent {
   private CANSparkMax controllerLeft1;

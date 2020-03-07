@@ -40,14 +40,12 @@ class JoystickConfig {
 }
 
 public class DriverJoystick extends LoggableRobotComponent {
-  private int joystickID;
   private Joystick joystick;
   private JoystickConfig config;
 
   public static JoystickConfig defaultLogitechConfig = new JoystickConfig(1, 0, 5, 4, 4, 3, 1, 2, 5, 6, 2, 3);
 
   public DriverJoystick(int joystickID, JoystickConfig config) {
-    this.joystickID = joystickID;
     this.joystick = new Joystick(joystickID);
     this.config = config;
   }
